@@ -1,66 +1,79 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { Box, Grid, Heading, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Home, Profile } from "iconsax-react";
 
-export default function Home() {
+import { TopBar } from "@/components/layout/TopBar";
+import { TabNav } from "@/components/layout/TabNav";
+import { PAGE_MAX_W, PAGE_PX } from "@/components/layout/page-inset";
+import { FeaturedListingCard } from "@/components/dashboard/FeaturedListingCard";
+import { OverviewCard } from "@/components/dashboard/OverviewCard";
+import { SalesOverviewCard } from "@/components/dashboard/SalesOverviewCard";
+import { featured, listingsOverview, usersOverview } from "@/data/dashboard";
+import { Chat } from "@/components/dashboard/Chat";
+
+const ICON_PROPS = { size: 24, strokeWidth: 1.6, color: "#4545FE" } as const;
+
+export default function DashboardPage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <Box bg="surface.page" minH="100vh">
+      <Box position="sticky" top={0} zIndex={10}>
+        <TopBar />
+        <TabNav />
+      </Box>
+
+      <Box
+        maxW={PAGE_MAX_W}
+        mx="auto"
+        px={PAGE_PX}
+        pt={{ base: "16px", md: "20px" }}
+        pb={{ base: "40px", md: "60px" }}
+      >
+        <Heading
+          as="h1"
+          fontSize={{ base: "18px", md: "20px" }}
+          fontWeight={600}
+          color="text.heading"
+          lineHeight="1.2"
+        >
+          Welcome, Ahmed
+        </Heading>
+
+        <Grid
+          mt={{ base: "16px", md: "20px" }}
+          gap={{ base: "16px", md: "20px" }}
+          templateColumns={{
+            base: "1fr",
+            xl: "minmax(0, 856px) minmax(0, 1fr)",
+          }}
+        >
+          <SalesOverviewCard />
+          <Stack gap={{ base: "16px", md: "20px" }}>
+            <OverviewCard
+              title={listingsOverview.title}
+              stats={listingsOverview.stats}
+              icon={<Home {...ICON_PROPS} />}
+              viewAllHref="#"
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <OverviewCard
+              title={usersOverview.title}
+              stats={usersOverview.stats}
+              icon={<Profile {...ICON_PROPS} />}
+              viewAllHref="#"
+            />
+          </Stack>
+        </Grid>
+
+        <SimpleGrid
+          columns={{ base: 1, md: 2, lg: 3 }}
+          gap={{ base: "16px", md: "15px" }}
+          mt={{ base: "16px", md: "20px" }}
+        >
+          {featured.map((listing) => (
+            <FeaturedListingCard key={listing.tag} listing={listing} />
+          ))}
+        </SimpleGrid>
+      </Box>
+
+      <Chat />
+    </Box>
   );
 }
